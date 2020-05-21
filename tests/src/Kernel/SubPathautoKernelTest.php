@@ -62,7 +62,7 @@ class SubPathautoKernelTest extends KernelTestBase {
     $type->save();
 
     $this->sut = $this->container->get('path_processor_subpathauto');
-    $this->aliasWhiteList = $this->container->get('path.alias_whitelist');
+    $this->aliasWhiteList = $this->container->get('path_alias.whitelist');
 
     Node::create(['type' => 'page', 'title' => 'test'])->save();
 

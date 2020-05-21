@@ -243,7 +243,7 @@ class SubPathautoTest extends UnitTestCase {
    * @return string
    */
   public function pathAliasCallback($path) {
-    return isset($this->aliases[$path]) ? $this->aliases[$path] : $path;
+    return $this->aliases[$path] ?? $path;
   }
 
   /**
