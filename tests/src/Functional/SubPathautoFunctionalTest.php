@@ -17,6 +17,7 @@ class SubPathautoFunctionalTest extends BrowserTestBase {
    */
   public static $modules = [
     'subpathauto',
+    'path_alias',
     'node',
     'user',
     'block',
