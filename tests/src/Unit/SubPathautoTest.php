@@ -15,26 +15,36 @@ use Drupal\subpathauto\PathProcessor;
 class SubPathautoTest extends UnitTestCase {
 
   /**
+   * The mocked path alias processor.
+   *
    * @var \Drupal\path_alias\PathProcessor\AliasPathProcessor|\PHPUnit_Framework_MockObject_MockObject
    */
   protected $aliasProcessor;
 
   /**
+   * The mocked language manager.
+   *
    * @var \Drupal\Core\Language\LanguageManagerInterface|\PHPUnit_Framework_MockObject_MockObject
    */
   protected $languageManager;
 
   /**
+   * The mocked path validator.
+   *
    * @var \Drupal\Core\Path\PathValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
    */
   protected $pathValidator;
 
   /**
+   * The mocked config factory.
+   *
    * @var \Drupal\Core\Config\ConfigFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
    */
   protected $configFactory;
 
   /**
+   * The mocked configuration entity.
+   *
    * @var \Drupal\Core\Config\ConfigBase|\PHPUnit_Framework_MockObject_MockObject
    */
   protected $subPathautoSettings;
@@ -231,7 +241,7 @@ class SubPathautoTest extends UnitTestCase {
   }
 
   /**
-   * Return value callback for getSystemPath() method on the mock alias manager.
+   * Return value callback for getPathByAlias() method on the alias manager.
    *
    * Ensures that by default the call to getPathAlias() will return the first
    * argument that was passed in. We special-case the paths for which we wish it
@@ -241,6 +251,7 @@ class SubPathautoTest extends UnitTestCase {
    *   The path.
    *
    * @return string
+   *   The path represented by the alias, or the alias if no path was found.
    */
   public function pathAliasCallback($path) {
     return $this->aliases[$path] ?? $path;
@@ -253,6 +264,7 @@ class SubPathautoTest extends UnitTestCase {
    *   The path.
    *
    * @return string
+   *   An alias that represents the path, or path if no alias was found.
    */
   public function aliasByPathCallback($path) {
     $aliases = array_flip($this->aliases);
