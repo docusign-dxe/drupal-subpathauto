@@ -1,0 +1,7 @@
+{
+    "name": "drupal/subpathauto",
+    "description": "Sub-path URL Aliases",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "require": {}
+}
