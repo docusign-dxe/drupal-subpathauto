@@ -9,6 +9,7 @@ use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
 use Drupal\Core\PathProcessor\OutboundPathProcessorInterface;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\language\Plugin\LanguageNegotiation\LanguageNegotiationUrl;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -149,9 +150,17 @@ class PathProcessor implements InboundPathProcessorInterface, OutboundPathProces
    */
   protected function getPath($path_info) {
     $language_prefix = '/' . $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_URL)->getId() . '/';
+    $prefixes = $this->getLanguageUrlPrefixes();
+    $current_language_id = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_URL)
+      ->getId();
 
-    if (substr($path_info, 0, strlen($language_prefix)) == $language_prefix) {
-      $path_info = '/' . substr($path_info, strlen($language_prefix));
+    if (isset($prefixes[$current_language_id])) {
+      $language_prefix = $prefixes[$current_language_id];
+      $url_language_prefix = '/' . $language_prefix . '/';
+
+      if (substr($path_info, 0, strlen($url_language_prefix)) == $url_language_prefix) {
+        $path_info = '/' . substr($path_info, strlen($url_language_prefix));
+      }
     }
 
     return $path_info;
@@ -218,4 +227,18 @@ class PathProcessor implements InboundPathProcessorInterface, OutboundPathProces
     return $this->configFactory->get('subpathauto.settings')->get('depth');
   }
 
+ /**
+  * Language URL prefixes.
+  *
+  * @return array
+  *   List of prefixes.
+  */
+  protected function getLanguageUrlPrefixes() {
+    $config = $this->configFactory->get('language.negotiation')->get('url');
+    if (isset($config['prefixes']) && $config['source'] == LanguageNegotiationUrl::CONFIG_PATH_PREFIX) {
+      return $config['prefixes'];
+    }
+
+    return [];
+  }
 }
