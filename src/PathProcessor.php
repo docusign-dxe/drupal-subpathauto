@@ -163,7 +163,7 @@ class PathProcessor implements InboundPathProcessorInterface, OutboundPathProces
       }
     }
 
-    return $path_info;
+    return rtrim(urldecode($path_info), '/');
   }
 
   /**

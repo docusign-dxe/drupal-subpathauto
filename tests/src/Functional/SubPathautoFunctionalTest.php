@@ -40,6 +40,7 @@ class SubPathautoFunctionalTest extends BrowserTestBase {
 
     $this->drupalCreateContentType(['type' => 'page', 'name' => 'Basic page']);
     $this->drupalCreateNode();
+    $this->drupalCreateNode();
 
     ConfigurableLanguage::create(['id' => 'fi'])->save();
 
@@ -53,6 +54,13 @@ class SubPathautoFunctionalTest extends BrowserTestBase {
     $path_alias = $aliasStorage->create([
       'path' => '/node/1',
       'alias' => '/kittens',
+    ]);
+    $path_alias->save();
+
+    // Create alias with a special character.
+    $path_alias = $aliasStorage->create([
+      'path' => '/node/2',
+      'alias' => '/special-character-é',
     ]);
     $path_alias->save();
 
@@ -97,6 +105,14 @@ class SubPathautoFunctionalTest extends BrowserTestBase {
   public function testNonExistingPath() {
     $this->drupalGet('/kittens/are-faken');
     $this->assertSession()->statusCodeEquals(404);
+  }
+
+  /**
+   * Ensure that subpathauto works with special characters.
+   */
+  public function testPathWithSpecialCharacters() {
+    $this->drupalGet('/special-character-é/edit');
+    $this->assertSession()->statusCodeEquals(200);
   }
 
 }
